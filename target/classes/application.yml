@@ -1,0 +1,44 @@
+server:
+  port: 60012
+spring:
+  topic-nacos-list:
+    - ycjt.local
+  application:
+    name: hdbsthor-012-airflow
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${spring.profiles.active}
+        server-addr: 61.183.16.83:8848
+        username: nacos
+        password: TK9zdO7Nq3876dMpQgjO
+      config:
+        namespace: ${spring.profiles.active}
+        server-addr: 61.183.16.83:8848
+        username: nacos
+        password: TK9zdO7Nq3876dMpQgjO
+        file-extension: yaml
+  config:
+    import:
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}
+      - optional:nacos:swagger-${spring.profiles.active}
+      - optional:nacos:logging-${spring.profiles.active}
+      - optional:nacos:mysqlList_yml # 添加导入 Nacos 配置
+camunda:
+  bpm:
+    client:
+      #引擎根路径(测试)
+      base-url: https://hdbsthor-005-camunda.xueshu.ren/engine-rest
+      #引擎根路径(本地开发)
+      #base-url: http://localhost:60005/engine-rest
+      #长轮询时间间隔
+      async-response-timeout: 10000
+      #一次最多拉取任务的数量
+      max-tasks: 1
+      #全局订阅topic上锁时间，单位毫秒，锁住期间，其他订阅者拉取不任务
+      lock-duration: 10000
+      #指定工作节点的ID
+      worker-id: hdbsthor-012-airflow-java
+      tenantIds: ${spring.tenantIds}
